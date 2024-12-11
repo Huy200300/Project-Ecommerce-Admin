@@ -53,7 +53,7 @@ const OrderDetailModal = ({ open, onClose, order, status, onCancelOrder, ok, onC
                                 >
                                     <div className="w-1/4 flex justify-center">
                                         <img
-                                            src={product.color ? product.colorImage : product.colorImage[0]}
+                                            src={product.color ? product.colorImage : product.colorImage}
                                             alt={product.productName}
                                             className="w-20 h-20 object-contain rounded-lg border"
                                         />

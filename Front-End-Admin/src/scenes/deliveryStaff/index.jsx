@@ -123,13 +123,11 @@ const DeliveryStaff = () => {
     });
 
     const handleCancelOrder = async (e, reason) => {
-        // console.log(reason, selectedOrder._id)
         if (!selectedOrder) return;
         await updateOrderStatus(e, selectedOrder._id, "Cancelled", reason);
     };
 
     const handleOpenModal = (order, status) => {
-        // console.log(status, order)
         setSelectedOrder(order);
         setStatus(status)
         setOpenModal(true);
@@ -269,8 +267,6 @@ const DeliveryStaff = () => {
         }
     ];
 
-    console.log(status)
-
     return (
         <div className="mx-4" style={{ height: 400, width: "100%" }}>
             <Header title="Nhân viên giao hàng" subtitle="Quản lý nhân viên giao hàng" />
@@ -390,11 +386,10 @@ const DeliveryStaff = () => {
             <OrderDetailModal
                 open={openModal}
                 onClose={() => setOpenModal(false)}
-                status={status}
                 order={selectedOrder}
                 onConfirm={status === "Shipping" ? (e) => updateOrderStatus(e, selectedOrder._id, "Shipped", "Nhận giao hàng") : (e) => updateOrderStatus(e, selectedOrder._id, "Delivered", "Xác nhận giao hàng")}
                 onCancelOrder={handleCancelOrder}
-                isCancel={false}
+                isCancel={true}
                 ok={status === "Shipping" ? "Nhận giao hàng" : "Xác nhận giao hàng"}
             />
         </div>
