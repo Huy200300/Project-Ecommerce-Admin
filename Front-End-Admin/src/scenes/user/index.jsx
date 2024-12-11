@@ -183,19 +183,21 @@ const Team = () => {
                 </MenuItem>
               ))}
             </Select>
-            <Button
-              variant="contained"
-              color={isRoleChanged ? "info" : "primary"}
-              onClick={() => {
-                if (isRoleChanged) {
-                  handleChangeRole(row._id, currentRole);
-                } else {
-                  handleOpenModal(row);
-                }
-              }}
-            >
-              {isRoleChanged && "Thay đổi role"}
-            </Button>
+            {
+              isRoleChanged && <Button
+                variant="contained"
+                color={isRoleChanged ? "info" : "primary"}
+                onClick={() => {
+                  if (isRoleChanged) {
+                    handleChangeRole(row._id, currentRole);
+                  } else {
+                    handleOpenModal(row);
+                  }
+                }}
+              >
+                Thay đổi role
+              </Button>
+            }
           </Box>
         );
       },
