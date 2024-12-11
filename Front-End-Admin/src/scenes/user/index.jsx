@@ -79,7 +79,7 @@ const Team = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên",
       flex: 1,
       cellClassName: "name-column--cell",
       headerAlign: 'center',
@@ -92,7 +92,7 @@ const Team = () => {
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "Số điện thoại",
       flex: 1,
       headerAlign: 'center',
     },
@@ -135,7 +135,7 @@ const Team = () => {
     },
     {
       field: "createdAt",
-      headerName: "Created At",
+      headerName: "Ngày tạo",
       flex: 1,
       type: "date",
       valueGetter: ({ value }) => new Date(value).toLocaleDateString(),
@@ -143,7 +143,7 @@ const Team = () => {
     },
     {
       field: "avatar",
-      headerName: "Image",
+      headerName: "Hình ảnh",
       flex: 1,
       headerAlign: 'center',
       renderCell: ({ row }) => (
@@ -162,7 +162,7 @@ const Team = () => {
     },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: "Hành động",
       flex: 2,
       headerAlign: 'center',
       renderCell: ({ row }) => {
@@ -194,7 +194,7 @@ const Team = () => {
                 }
               }}
             >
-              {isRoleChanged ? "Change Role" : "Edit"}
+              {isRoleChanged ? "Thay đổi role" : ""}
             </Button>
           </Box>
         );
