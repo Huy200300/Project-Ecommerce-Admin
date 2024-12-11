@@ -314,7 +314,7 @@ const UploadProduct = ({ onClose, reload }) => {
                         {displayProductImages(data.productImage, setOpenFullScreenImage, setFullScreenImage, handleDeleteImage, 'product')}
                     </div>
 
-                    <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Colors</Typography>
+                    <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Màu</Typography>
 
                     {!data.category ? (
                         <p className="text-red-500">Bạn cần chọn danh mục trước.</p>
@@ -341,10 +341,12 @@ const UploadProduct = ({ onClose, reload }) => {
 
                                     {data.category === 'mobiles' && (
                                         <>
-                                            <Select
+                                            <TextField
                                                 label="Dung lượng"
                                                 variant="outlined"
                                                 fullWidth
+                                                select
+                                                name="size"
                                                 value={color.size || ''}
                                                 onChange={(e) => handleColorChange(index, 'size', e.target.value)}
                                                 margin="normal"
@@ -354,7 +356,7 @@ const UploadProduct = ({ onClose, reload }) => {
                                                         {size}
                                                     </MenuItem>
                                                 ))}
-                                            </Select>
+                                            </TextField>
 
                                             <TextField
                                                 label="Giá gốc theo dung lượng"
