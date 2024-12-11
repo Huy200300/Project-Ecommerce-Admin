@@ -194,7 +194,7 @@ const Team = () => {
                 }
               }}
             >
-              {isRoleChanged ? "Thay đổi role" : ""}
+              {isRoleChanged && "Thay đổi role"}
             </Button>
           </Box>
         );
