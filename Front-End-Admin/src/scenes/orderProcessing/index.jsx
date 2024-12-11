@@ -34,12 +34,12 @@ const OrderProcessing = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [orders, setOrders] = useState([]);
-    const [filterStatus, setFilterStatus] = useState("");
+    const [filterStatus, setFilterStatus] = useState("Pending");
     const [pageSize, setPageSize] = useState(8);
     const [page, setPage] = useState(0);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-
+    const [paymentStatus, setPaymentStatus] = useState("");
 
     useEffect(() => {
         fetchData();
@@ -101,9 +101,19 @@ const OrderProcessing = () => {
             : "Unknown";
     };
 
-    const filteredOrders = filterStatus
-        ? orders.filter((order) => currentStatus(order) === filterStatus)
-        : orders;
+    const filteredOrders = orders.filter((order) => {
+        // Lọc theo trạng thái đơn hàng (ví dụ: "Shipped", "Cancelled",...)
+        const statusMatches = filterStatus ? currentStatus(order) === filterStatus : true;
+
+        // Lọc theo trạng thái thanh toán (Đã thanh toán / Chưa thanh toán)
+        const paymentStatusMatches = paymentStatus === "paid" ? order.isPaid : paymentStatus === "unpaid" ? !order.isPaid : true;
+
+        // Kết hợp cả 2 điều kiện
+        return statusMatches && paymentStatusMatches;
+    });
+
+
+
 
     const handleCancelOrder = async (e, reason) => {
         if (!selectedOrder) return;
@@ -111,6 +121,7 @@ const OrderProcessing = () => {
     };
 
     const handleOpenModal = (order) => {
+        console.log(order)
         setSelectedOrder(order);
         setOpenModal(true);
     };
@@ -192,6 +203,19 @@ const OrderProcessing = () => {
             },
         },
         {
+            field: "paymentStatus",
+            headerName: "Thanh toán",
+            width: 150,
+            renderCell: (params) => (
+                <span
+                    className={`px-2 py-1 rounded text-white ${params.row.isPaid ? "bg-green-500" : "bg-red-500"
+                        }`}
+                >
+                    {params.row.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
+                </span>
+            ),
+        },
+        {
             field: "action",
             headerName: filterStatus === "Cancelled" ? "Lý do" : "Hành động",
             flex: 2.5,
@@ -248,14 +272,30 @@ const OrderProcessing = () => {
                     >
                         {step.label}
                     </button>
+
                 ))}
                 <button
-                    onClick={() => setFilterStatus("")}
-                    className={`border text-white rounded px-3 py-2 transition ${filterStatus === "" ? 'bg-blue-500 text-white' : 'text-black'
+                    onClick={() => setPaymentStatus("")}
+                    className={`border text-white rounded px-3 py-2 transition ${paymentStatus === "" ? "bg-green-500 text-white" : "text-black"
                         }`}
                 >
-                    Tất cả trạng thái
+                    Tất cả
                 </button>
+                <button
+                    onClick={() => setPaymentStatus("paid")}
+                    className={`border text-white rounded px-3 py-2 transition ${paymentStatus === "paid" ? "bg-green-500 text-white" : "text-black"
+                        }`}
+                >
+                    Đã thanh toán
+                </button>
+                <button
+                    onClick={() => setPaymentStatus("unpaid")}
+                    className={`border text-white rounded px-3 py-2 transition ${paymentStatus === "unpaid" ? "bg-red-500 text-white" : "text-black"
+                        }`}
+                >
+                    Chưa thanh toán
+                </button>
+
             </div>
 
             <Box

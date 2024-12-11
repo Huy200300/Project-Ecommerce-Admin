@@ -197,7 +197,7 @@ const AdminEditProduct = ({ onClose, dataProduct, reload }) => {
             localStorage.setItem('cart', JSON.stringify(updatedProducts));
             toast.success(dataApi.message)
             onClose()
-            // reload(data?.status)
+            reload(data?.status)
         } else if (dataApi.error) {
             toast.error(dataApi.message)
         }

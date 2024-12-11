@@ -155,7 +155,7 @@ const OrderDetailModal = ({ open, onClose, order, status, onCancelOrder, ok, onC
                                 Hủy đơn hàng
                             </Button>
                         }
-                        {hasStock && (
+                        {!hasStock && (
                             <Button
                                 variant="contained"
                                 color="primary"

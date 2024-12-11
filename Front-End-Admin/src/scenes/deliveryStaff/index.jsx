@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import SummaryApi from "../../common";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box, Button, IconButton, TextField, MenuItem } from "@mui/material";
+import { Box, Button, IconButton, TextField, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
@@ -45,11 +45,10 @@ const DeliveryStaff = () => {
     const [page, setPage] = useState(0);
     const [openModal, setOpenModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [showCancelInput, setShowCancelInput] = useState(false);
     const [cancelReason, setCancelReason] = useState("");
     const [status, setStatus] = useState("")
-    const [showOtherReason, setShowOtherReason] = useState(false);
     const [otherReason, setOtherReason] = useState('');
+    const [openCancelModal, setOpenCancelModal] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -77,10 +76,12 @@ const DeliveryStaff = () => {
         }
     };
 
+    // console.log("orders",orders)
+
     const updateOrderStatus = async (e, orderId, newStatus, reason) => {
         e.preventDefault();
         e.stopPropagation();
-
+        console.log(orderId, newStatus, reason)
         const res = await fetch(SummaryApi.update_status_order.url, {
             method: SummaryApi.update_status_order.method,
             credentials: "include",
@@ -91,6 +92,7 @@ const DeliveryStaff = () => {
             body: JSON.stringify({ orderId, newStatus, reason }),
         });
         const dataApi = await res.json();
+        console.log("data", dataApi);
         if (dataApi.success) {
             setOrders((prevOrders) =>
                 prevOrders.map((order) =>
@@ -120,16 +122,23 @@ const DeliveryStaff = () => {
             : status === filterStatus;
     });
 
-
     const handleCancelOrder = async (e, reason) => {
+        // console.log(reason, selectedOrder._id)
         if (!selectedOrder) return;
         await updateOrderStatus(e, selectedOrder._id, "Cancelled", reason);
     };
 
     const handleOpenModal = (order, status) => {
+        // console.log(status, order)
         setSelectedOrder(order);
         setStatus(status)
         setOpenModal(true);
+    };
+
+    const handleCloseCancelModal = () => {
+        setOpenCancelModal(false);
+        setCancelReason("");
+        setOtherReason("");
     };
 
     const columns = [
@@ -230,103 +239,26 @@ const DeliveryStaff = () => {
                                 )}
 
                                 {currentStatus(params.row) === "Shipped" &&
-                                    (<>
-                                        {showCancelInput[params.row._id] ? (
-                                            <div className="flex flex-col">
-                                                <div className="mb-2">
-                                                    <TextField
-                                                        select
-                                                        label="Chọn lý do hủy"
-                                                        value={cancelReason[params.row._id] || ""}
-                                                        onChange={(e) => {
-                                                            const value = e.target.value;
-                                                            setCancelReason((prev) => ({
-                                                                ...prev,
-                                                                [params.row._id]: value,
-                                                            }));
+                                    (
+                                        <>
+                                            <Button
+                                                variant="contained"
+                                                color="error"
+                                                onClick={() => setOpenCancelModal(true)}
 
-                                                            setShowOtherReason(value === "Lý do khác");
-                                                        }}
-                                                        variant="outlined"
-                                                        fullWidth
-                                                        size="small"
-                                                    >
-                                                        <MenuItem value="Khách không có nhà">Khách không có nhà</MenuItem>
-                                                        <MenuItem value="Khách không nhận hàng">Khách không nhận hàng</MenuItem>
-                                                        <MenuItem value="Lý do khác">Lý do khác</MenuItem>
-                                                    </TextField>
-                                                </div>
-                                                {/* Ô nhập lý do khác nếu được chọn */}
-                                                {showOtherReason && (
-                                                    <TextField
-                                                        size="small"
-                                                        placeholder="Nhập lý do khác"
-                                                        value={otherReason[params.row._id] || ""}
-                                                        onChange={(e) =>
-                                                            setOtherReason((prev) => ({
-                                                                ...prev,
-                                                                [params.row._id]: e.target.value,
-                                                            }))
-                                                        }
-                                                        variant="outlined"
-                                                        className="mb-2"
-                                                    />
-                                                )}
-                                                <div className="flex">
-                                                    <IconButton
-                                                        onClick={(e) =>
-                                                            updateOrderStatus(
-                                                                e,
-                                                                params.row._id,
-                                                                "Cancelled",
-                                                                showOtherReason ? otherReason[params.row._id] : cancelReason[params.row._id]
-                                                            )
-                                                        }
-                                                        color="error"
-                                                    >
-                                                        <CancelIcon />
-                                                    </IconButton>
-                                                    <Button
-                                                        variant="outlined"
-                                                        color="secondary"
-                                                        onClick={() =>
-                                                            setShowCancelInput((prev) => ({
-                                                                ...prev,
-                                                                [params.row._id]: false,
-                                                            }))
-                                                        }
-                                                        className="ml-2"
-                                                    >
-                                                        Trở lại
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    onClick={() =>
-                                                        setShowCancelInput((prev) => ({
-                                                            ...prev,
-                                                            [params.row._id]: true,
-                                                        }))
-                                                    }
-                                                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transform hover:scale-105 transition-all duration-300"
-                                                >
-                                                    Hủy đơn
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={() => handleOpenModal(params.row, "Shipped")}
-                                                    className="ml-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transform hover:scale-105 transition-all duration-300"
-                                                >
-                                                    Xác nhận giao hàng
-                                                </Button>
-                                            </>
-                                        )}
-                                    </>
+                                                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transform hover:scale-105 transition-all duration-300"
+                                            >
+                                                Hủy đơn
+                                            </Button>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => handleOpenModal(params.row, "Shipped")}
+                                                className="ml-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transform hover:scale-105 transition-all duration-300"
+                                            >
+                                                Xác nhận giao hàng
+                                            </Button>
+                                        </>
                                     )
                                 }
                             </>
@@ -390,6 +322,71 @@ const DeliveryStaff = () => {
                     <div className="text-center">Không có đơn hàng nào .</div>
                 )}
             </Box>
+            <Dialog open={openCancelModal} onClose={handleCloseCancelModal} fullWidth maxWidth="sm">
+                <DialogTitle>Chọn lý do hủy đơn hàng</DialogTitle>
+                <DialogContent>
+                    <div className="flex flex-col space-y-4">
+                        <label>
+                            <input
+                                type="radio"
+                                name="cancelReason"
+                                value="Khách không có nhà"
+                                checked={cancelReason === "Khách không có nhà"}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                            />
+                            <span className="ml-2">Khách không có nhà</span>
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="cancelReason"
+                                value="Khách không nhận hàng"
+                                checked={cancelReason === "Khách không nhận hàng"}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                            />
+                            <span className="ml-2">Khách không nhận hàng</span>
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="cancelReason"
+                                value="Lý do khác"
+                                checked={cancelReason === "Lý do khác"}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                            />
+                            <span className="ml-2">Lý do khác</span>
+                        </label>
+                        {cancelReason === "Lý do khác" && (
+                            <TextField
+                                size="small"
+                                placeholder="Nhập lý do khác"
+                                value={otherReason}
+                                onChange={(e) => setOtherReason(e.target.value)}
+                                variant="outlined"
+                                fullWidth
+                            />
+                        )}
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={(e) => {
+                            const reason = cancelReason === "Lý do khác" ? otherReason : cancelReason;
+                            handleCancelOrder(e, reason);
+                            handleCloseCancelModal();
+                        }}
+                        disabled={!cancelReason || (cancelReason === "Lý do khác" && !otherReason)}
+                    >
+                        Xác nhận hủy
+                    </Button>
+                    <Button onClick={handleCloseCancelModal} color="secondary" variant="outlined">
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <OrderDetailModal
                 open={openModal}
                 onClose={() => setOpenModal(false)}

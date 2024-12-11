@@ -97,8 +97,8 @@ const Invoices = () => {
     const data = await res.json()
     if (data.success) {
       toast.success(data.message);
-      // setFilterStatus(actionType);
-      // fetchProductsByStatus(actionType);
+      setFilterStatus(actionType);
+      fetchProductsByStatus(actionType);
       setConfirmModalIsOpen(false);
     }
   };
