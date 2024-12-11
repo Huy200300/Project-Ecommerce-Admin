@@ -83,7 +83,7 @@ const Form = () => {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Số điẹne thoại"
+                label="Số điện thoại"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.phone}
