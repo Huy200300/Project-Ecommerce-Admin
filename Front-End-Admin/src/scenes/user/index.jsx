@@ -239,7 +239,7 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      <Header title="USER" subtitle="Managing the USER Members" />
+      <Header title="Người dùng và Nhân viên" subtitle="Quản lí người dùng và nhân viên" />
       <Box
         m="40px 0 0 0"
         height="75vh"
