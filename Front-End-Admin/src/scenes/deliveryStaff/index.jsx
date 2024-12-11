@@ -124,12 +124,6 @@ const DeliveryStaff = () => {
         await updateOrderStatus(e, selectedOrder._id, "Cancelled", reason);
     };
 
-    // const handleOpenModal = (order, status) => {
-    //     setSelectedOrder(order); // Lưu thông tin đơn hàng được chọn
-    //     setCurrentStatus(status); // Lưu trạng thái hiện tại
-    //     setOpenModal(true); // Mở modal
-    // };
-
     const handleOpenModal = (order, status) => {
         setSelectedOrder(order);
         setStatus(status)
@@ -315,6 +309,8 @@ const DeliveryStaff = () => {
             ),
         }
     ];
+
+    console.log(status)
 
     return (
         <div className="mx-4" style={{ height: 400, width: "100%" }}>

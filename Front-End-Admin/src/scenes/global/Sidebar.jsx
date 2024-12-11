@@ -193,7 +193,7 @@ const Sidebar = () => {
             {
               role === "deliveryStaff" && (
                 <Item
-                  title="Gia hàng"
+                  title="Giao hàng"
                   to="/delivery-staff"
                   icon={<LocalShippingOutlinedIcon />}
                   selected={selected}
