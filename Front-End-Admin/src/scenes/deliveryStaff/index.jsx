@@ -230,46 +230,75 @@ const DeliveryStaff = () => {
                                 {currentStatus(params.row) === "Shipped" &&
                                     (<>
                                         {showCancelInput[params.row._id] ? (
-                                            <div className="flex">
-                                                <TextField
-                                                    size="small"
-                                                    placeholder="Nhập lý do hủy"
-                                                    value={cancelReason[params.row._id] || ""}
-                                                    onChange={(e) =>
-                                                        setCancelReason((prev) => ({
-                                                            ...prev,
-                                                            [params.row._id]: e.target.value,
-                                                        }))
-                                                    }
-                                                    variant="outlined"
-                                                    className="mr-2"
-                                                />
-                                                <IconButton
-                                                    onClick={(e) =>
-                                                        updateOrderStatus(
-                                                            e,
-                                                            params.row._id,
-                                                            "Cancelled",
-                                                            cancelReason[params.row._id]
-                                                        )
-                                                    }
-                                                    color="error"
-                                                >
-                                                    <CancelIcon />
-                                                </IconButton>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="secondary"
-                                                    onClick={() =>
-                                                        setShowCancelInput((prev) => ({
-                                                            ...prev,
-                                                            [params.row._id]: false,
-                                                        }))
-                                                    }
-                                                    className="ml-2"
-                                                >
-                                                    Trở lại
-                                                </Button>
+                                            <div className="flex flex-col">
+                                                {/* Dropdown lựa chọn lý do hủy */}
+                                                <div className="mb-2">
+                                                    <TextField
+                                                        select
+                                                        label="Chọn lý do hủy"
+                                                        value={cancelReason[params.row._id] || ""}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            setCancelReason((prev) => ({
+                                                                ...prev,
+                                                                [params.row._id]: value,
+                                                            }));
+                                                            // Nếu chọn "Lý do khác", bật ô nhập liệu
+                                                            setShowOtherReason(value === "Lý do khác");
+                                                        }}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        size="small"
+                                                    >
+                                                        <MenuItem value="Khách không có nhà">Khách không có nhà</MenuItem>
+                                                        <MenuItem value="Khách không nhận hàng">Khách không nhận hàng</MenuItem>
+                                                        <MenuItem value="Lý do khác">Lý do khác</MenuItem>
+                                                    </TextField>
+                                                </div>
+                                                {/* Ô nhập lý do khác nếu được chọn */}
+                                                {showOtherReason && (
+                                                    <TextField
+                                                        size="small"
+                                                        placeholder="Nhập lý do khác"
+                                                        value={otherReason[params.row._id] || ""}
+                                                        onChange={(e) =>
+                                                            setOtherReason((prev) => ({
+                                                                ...prev,
+                                                                [params.row._id]: e.target.value,
+                                                            }))
+                                                        }
+                                                        variant="outlined"
+                                                        className="mb-2"
+                                                    />
+                                                )}
+                                                <div className="flex">
+                                                    <IconButton
+                                                        onClick={(e) =>
+                                                            updateOrderStatus(
+                                                                e,
+                                                                params.row._id,
+                                                                "Cancelled",
+                                                                showOtherReason ? otherReason[params.row._id] : cancelReason[params.row._id]
+                                                            )
+                                                        }
+                                                        color="error"
+                                                    >
+                                                        <CancelIcon />
+                                                    </IconButton>
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="secondary"
+                                                        onClick={() =>
+                                                            setShowCancelInput((prev) => ({
+                                                                ...prev,
+                                                                [params.row._id]: false,
+                                                            }))
+                                                        }
+                                                        className="ml-2"
+                                                    >
+                                                        Trở lại
+                                                    </Button>
+                                                </div>
                                             </div>
                                         ) : (
                                             <>
@@ -289,9 +318,6 @@ const DeliveryStaff = () => {
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
-                                                    // onClick={(e) =>
-                                                    //     updateOrderStatus(e, params.row._id, "Delivered", "Xác nhận giao hàng")
-                                                    // }
                                                     onClick={() => handleOpenModal(params.row, "Shipped")}
                                                     className="ml-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transform hover:scale-105 transition-all duration-300"
                                                 >
