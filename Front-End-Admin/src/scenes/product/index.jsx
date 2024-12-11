@@ -61,7 +61,7 @@ const Invoices = () => {
     const dataApi = await response.json();
     if (dataApi?.success) {
       toast.success(dataApi?.message);
-      // fetchProductsByStatus(actionType);
+      fetchProductsByStatus(actionType);
       setOpenDeleteProduct(false);
     } else {
       toast.error(dataApi?.message);
@@ -98,7 +98,7 @@ const Invoices = () => {
     if (data.success) {
       toast.success(data.message);
       setFilterStatus(actionType);
-      fetchProductsByStatus(actionType);
+      // fetchProductsByStatus(actionType);
       setConfirmModalIsOpen(false);
     }
   };
