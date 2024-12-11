@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import SummaryApi from "../../common";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box, Button, IconButton, TextField } from "@mui/material";
+import { Box, Button, IconButton, TextField, MenuItem } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
@@ -48,7 +48,7 @@ const DeliveryStaff = () => {
     const [showCancelInput, setShowCancelInput] = useState(false);
     const [cancelReason, setCancelReason] = useState("");
     const [status, setStatus] = useState("")
-
+    const [showOtherReason, setShowOtherReason] = useState(false);
     useEffect(() => {
         fetchData();
     }, []);
@@ -231,7 +231,6 @@ const DeliveryStaff = () => {
                                     (<>
                                         {showCancelInput[params.row._id] ? (
                                             <div className="flex flex-col">
-                                                {/* Dropdown lựa chọn lý do hủy */}
                                                 <div className="mb-2">
                                                     <TextField
                                                         select
@@ -243,7 +242,7 @@ const DeliveryStaff = () => {
                                                                 ...prev,
                                                                 [params.row._id]: value,
                                                             }));
-                                                            // Nếu chọn "Lý do khác", bật ô nhập liệu
+
                                                             setShowOtherReason(value === "Lý do khác");
                                                         }}
                                                         variant="outlined"
