@@ -97,7 +97,7 @@ const Invoices = () => {
     const data = await res.json()
     if (data.success) {
       toast.success(data.message);
-      setFilterStatus(actionType);
+      // setFilterStatus(actionType);
       // fetchProductsByStatus(actionType);
       setConfirmModalIsOpen(false);
     }
@@ -106,14 +106,14 @@ const Invoices = () => {
   const columns = [
     {
       field: "productName",
-      headerName: "Product Name",
+      headerName: "Tên sản phẩm",
       flex: 2,
       cellClassName: "name-column--cell",
       headerAlign: 'center',
     },
     {
       field: "productImage",
-      headerName: "Product Image",
+      headerName: "Ảnh sản phẩm",
       flex: 1,
       headerAlign: 'center',
       renderCell: ({ row }) => (
@@ -126,7 +126,7 @@ const Invoices = () => {
     },
     {
       field: "category",
-      headerName: "Category",
+      headerName: "Danh mục",
       flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
@@ -137,13 +137,13 @@ const Invoices = () => {
     },
     {
       field: "brandName",
-      headerName: "Brand",
+      headerName: "Hãng",
       flex: 1,
       headerAlign: 'center',
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: "Giá gốc",
       flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
@@ -154,7 +154,7 @@ const Invoices = () => {
     },
     {
       field: "sellingPrice",
-      headerName: "Selling Price",
+      headerName: "Giá bán",
       flex: 1,
       headerAlign: 'center',
       renderCell: (params) => (
@@ -165,19 +165,19 @@ const Invoices = () => {
     },
     {
       field: "selled",
-      headerName: "Selled",
+      headerName: "Lượt mua",
       flex: 1,
       headerAlign: 'center',
     },
     {
       field: "status",
-      headerName: "Status",
+      headerName: "Trạng thái",
       flex: 1,
       headerAlign: 'center',
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Hành động",
       flex: 2,
       headerAlign: 'center',
       renderCell: ({ row }) => (
