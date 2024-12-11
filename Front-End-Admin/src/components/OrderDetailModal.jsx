@@ -26,7 +26,6 @@ const OrderDetailModal = ({ open, onClose, order, status, onCancelOrder, ok, onC
     };
 
     const hasStock = order?.productDetails?.some((product) => product.stock === 0);
-    // console.log(hasStock)
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">

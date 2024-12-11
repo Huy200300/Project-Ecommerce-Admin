@@ -49,6 +49,8 @@ const DeliveryStaff = () => {
     const [cancelReason, setCancelReason] = useState("");
     const [status, setStatus] = useState("")
     const [showOtherReason, setShowOtherReason] = useState(false);
+    const [otherReason, setOtherReason] = useState('');
+
     useEffect(() => {
         fetchData();
     }, []);
